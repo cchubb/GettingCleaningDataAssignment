@@ -38,7 +38,103 @@ colnames(activity_labels) <- c("activity_id", "activity_label")
 feature_labels <- read.table(paste(data_dir, "/features.txt", sep=""))
 colnames(feature_labels) <- c("feature_id", "feature_label")
 
+#Read and union test and train data together.
+subject_merge  <- rbind(
+  read.table(paste(data_dir, "/test/subject_test.txt", sep="")), 
+  read.table(paste(data_dir, "/train/subject_train.txt", sep=""))
+)
+y_merge  <- rbind(
+  read.table(paste(data_dir, "/test/y_test.txt", sep="")), 
+  read.table(paste(data_dir, "/train/y_train.txt", sep=""))
+)
 
+
+body_acc_x_merge  <- rbind(
+  read.table(paste(data_dir, "/test/Inertial Signals/body_acc_x_test.txt", sep="")), 
+  read.table(paste(data_dir, "/train/Inertial Signals/body_acc_x_train.txt", sep=""))
+)
+body_acc_y_merge  <- rbind(
+  read.table(paste(data_dir, "/test/Inertial Signals/body_acc_y_test.txt", sep="")), 
+  read.table(paste(data_dir, "/train/Inertial Signals/body_acc_y_train.txt", sep=""))
+)  
+body_acc_z_merge  <- rbind(
+  read.table(paste(data_dir, "/test/Inertial Signals/body_acc_z_test.txt", sep="")), 
+  read.table(paste(data_dir, "/train/Inertial Signals/body_acc_z_train.txt", sep=""))
+)  
+body_gyro_x_merge <- rbind(
+  read.table(paste(data_dir, "/test/Inertial Signals/body_gyro_x_test.txt", sep="")), 
+  read.table(paste(data_dir, "/train/Inertial Signals/body_gyro_x_train.txt", sep=""))
+) 
+body_gyro_y_merge <- rbind(
+  read.table(paste(data_dir, "/test/Inertial Signals/body_gyro_y_test.txt", sep="")), 
+  read.table(paste(data_dir, "/train/Inertial Signals/body_gyro_y_train.txt", sep=""))
+) 
+body_gyro_z_merge <- rbind(
+  read.table(paste(data_dir, "/test/Inertial Signals/body_gyro_z_test.txt", sep="")), 
+  read.table(paste(data_dir, "/train/Inertial Signals/body_gyro_z_train.txt", sep=""))
+) 
+total_acc_x_merge <- rbind(
+  read.table(paste(data_dir, "/test/Inertial Signals/total_acc_x_test.txt", sep="")), 
+  read.table(paste(data_dir, "/train/Inertial Signals/total_acc_x_train.txt", sep=""))
+) 
+total_acc_y_merge <- rbind(
+  read.table(paste(data_dir, "/test/Inertial Signals/total_acc_y_test.txt", sep="")), 
+  read.table(paste(data_dir, "/train/Inertial Signals/total_acc_y_train.txt", sep=""))
+) 
+total_acc_z_merge <- rbind(
+  read.table(paste(data_dir, "/test/Inertial Signals/total_acc_z_test.txt", sep="")), 
+  read.table(paste(data_dir, "/train/Inertial Signals/total_acc_z_train.txt", sep=""))
+)
+
+#Add the subject and activity IDs, merge in the activity labels, plus find the means and standard deviations for each set of data
+
+#body_acc_x_summary <- data.frame(subject=subject_merge$V1, activity_id=y_merge$V1, mean=rowMeans(body_acc_x_merge), stdev = apply(body_acc_x_merge, 1, sd))
+#body_acc_y_summary <- data.frame(subject=subject_merge$V1, activity_id=y_merge$V1, mean=rowMeans(body_acc_y_merge), stdev = apply(body_acc_y_merge, 1, sd))
+#body_acc_z_summary <- data.frame(subject=subject_merge$V1, activity_id=y_merge$V1, mean=rowMeans(body_acc_z_merge), stdev = apply(body_acc_z_merge, 1, sd))
+#body_gyro_x_summary <- data.frame(subject=subject_merge$V1, activity_id=y_merge$V1, mean=rowMeans(body_gyro_x_merge), stdev = apply(body_gyro_x_merge, 1, sd))
+#body_gyro_y_summary <- data.frame(subject=subject_merge$V1, activity_id=y_merge$V1, mean=rowMeans(body_gyro_y_merge), stdev = apply(body_gyro_y_merge, 1, sd))
+#body_gyro_z_summary <- data.frame(subject=subject_merge$V1, activity_id=y_merge$V1, mean=rowMeans(body_gyro_z_merge), stdev = apply(body_gyro_z_merge, 1, sd))
+#total_acc_x_summary <- data.frame(subject=subject_merge$V1, activity_id=y_merge$V1, mean=rowMeans(total_acc_x_merge), stdev = apply(total_acc_x_merge, 1, sd))
+#total_acc_y_summary <- data.frame(subject=subject_merge$V1, activity_id=y_merge$V1, mean=rowMeans(total_acc_y_merge), stdev = apply(total_acc_y_merge, 1, sd))
+#total_acc_z_summary <- data.frame(subject=subject_merge$V1, activity_id=y_merge$V1, mean=rowMeans(total_acc_z_merge), stdev = apply(total_acc_z_merge, 1, sd))
+
+summary <-  merge(
+  data.frame(
+    subject = subject_merge$V1, 
+    activity_id = y_merge$V1, 
+    
+    body_acc_x_mean = rowMeans(body_acc_x_merge),
+    body_acc_x_stdev = apply(body_acc_x_merge, 1, sd),
+    
+    body_acc_y_mean = rowMeans(body_acc_y_merge),
+    body_acc_y_stdev = apply(body_acc_y_merge, 1, sd),
+    
+    body_acc_z_mean = rowMeans(body_acc_z_merge),
+    body_acc_z_stdev = apply(body_acc_z_merge, 1, sd),
+    
+    body_gyro_x_mean = rowMeans(body_gyro_x_merge),
+    body_gyro_x_stdev = apply(body_gyro_x_merge, 1, sd),
+    
+    body_gyro_y_mean = rowMeans(body_gyro_y_merge),
+    body_gyro_y_stdev = apply(body_gyro_y_merge, 1, sd),
+    
+    body_gyro_z_mean = rowMeans(body_gyro_z_merge),
+    body_gyro_z_stdev = apply(body_gyro_z_merge, 1, sd),
+    
+    total_acc_x_mean = rowMeans(total_acc_x_merge),
+    total_acc_x_stdev = apply(total_acc_x_merge, 1, sd),
+    
+    total_acc_y_mean = rowMeans(total_acc_y_merge),
+    total_acc_y_stdev = apply(total_acc_y_merge, 1, sd),
+    
+    total_acc_z_mean = rowMeans(total_acc_z_merge),
+    total_acc_z_stdev = apply(total_acc_z_merge, 1, sd)
+  ), activity_labels, by="activity_id")
+
+
+#Merge in the activity factors
+
+#Apply the feature labels to the dataset as the colnames
 
 
 
