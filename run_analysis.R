@@ -10,7 +10,8 @@
 
 #Ensure I am working in the right project directory.
 setwd("C:\\Users\\cchubb\\Coursera\\DataScience\\3Getting and Cleaning Data\\GettingCleaningDataAssignment")
-
+#Clear out any local variables, start fresh and remove unneeded data from the global environment
+rm(list = ls())
 
 #Connect to the server and download the file if it does not already exist
 if (! file.exists("./data")) { dir.create("./data")}
@@ -86,19 +87,8 @@ total_acc_z_merge <- rbind(
   read.table(paste(data_dir, "/train/Inertial Signals/total_acc_z_train.txt", sep=""))
 )
 
-#Add the subject and activity IDs, merge in the activity labels, plus find the means and standard deviations for each set of data
-
-#body_acc_x_summary <- data.frame(subject=subject_merge$V1, activity_id=y_merge$V1, mean=rowMeans(body_acc_x_merge), stdev = apply(body_acc_x_merge, 1, sd))
-#body_acc_y_summary <- data.frame(subject=subject_merge$V1, activity_id=y_merge$V1, mean=rowMeans(body_acc_y_merge), stdev = apply(body_acc_y_merge, 1, sd))
-#body_acc_z_summary <- data.frame(subject=subject_merge$V1, activity_id=y_merge$V1, mean=rowMeans(body_acc_z_merge), stdev = apply(body_acc_z_merge, 1, sd))
-#body_gyro_x_summary <- data.frame(subject=subject_merge$V1, activity_id=y_merge$V1, mean=rowMeans(body_gyro_x_merge), stdev = apply(body_gyro_x_merge, 1, sd))
-#body_gyro_y_summary <- data.frame(subject=subject_merge$V1, activity_id=y_merge$V1, mean=rowMeans(body_gyro_y_merge), stdev = apply(body_gyro_y_merge, 1, sd))
-#body_gyro_z_summary <- data.frame(subject=subject_merge$V1, activity_id=y_merge$V1, mean=rowMeans(body_gyro_z_merge), stdev = apply(body_gyro_z_merge, 1, sd))
-#total_acc_x_summary <- data.frame(subject=subject_merge$V1, activity_id=y_merge$V1, mean=rowMeans(total_acc_x_merge), stdev = apply(total_acc_x_merge, 1, sd))
-#total_acc_y_summary <- data.frame(subject=subject_merge$V1, activity_id=y_merge$V1, mean=rowMeans(total_acc_y_merge), stdev = apply(total_acc_y_merge, 1, sd))
-#total_acc_z_summary <- data.frame(subject=subject_merge$V1, activity_id=y_merge$V1, mean=rowMeans(total_acc_z_merge), stdev = apply(total_acc_z_merge, 1, sd))
-
-summary <-  merge(
+#Add the subject and activity IDs, merge in the activity labels, plus find the means and standard deviations for each set of data raw data
+data_summary <-  merge(
   data.frame(
     subject = subject_merge$V1, 
     activity_id = y_merge$V1, 
@@ -131,10 +121,27 @@ summary <-  merge(
     total_acc_z_stdev = apply(total_acc_z_merge, 1, sd)
   ), activity_labels, by="activity_id")
 
-
-#Merge in the activity factors
+#Read the X feature summary for test/train and merge together
+X_merge <- rbind(
+  read.table(paste(data_dir, "/test/X_test.txt", sep="")), 
+  read.table(paste(data_dir, "/train/X_train.txt", sep=""))
+)
 
 #Apply the feature labels to the dataset as the colnames
+colnames(X_merge) <- feature_labels$feature_label
+#X_merge[["subject"]] <- subject_merge$V1
+#X_merge[["activity_id"]] <- y_merge$V1
+
+#Extract only the mean()/std() variables from the feature set for column appending to the real data
+data_summary <- cbind(
+  data_summary,
+  X_merge[, grepl("(mean\\()|(std\\()", names(X_merge))]
+)
+
+
+#From the data set in step 4, creates a second, independent tidy data set 
+#  with the average of each variable for each activity and each subject.
+
 
 
 
