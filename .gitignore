@@ -32,3 +32,6 @@ vignettes/*.pdf
 *.utf8.md
 *.knit.md
 /data
+/*.csv
+/CodeBook.html
+/README.html

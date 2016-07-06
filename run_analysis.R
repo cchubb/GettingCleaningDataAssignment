@@ -71,8 +71,6 @@ X_merge <- rbind(
 
 #Apply the feature labels to the dataset as the colnames
 colnames(X_merge) <- feature_labels$feature_label
-#X_merge[["subject"]] <- subject_merge$V1
-#X_merge[["activity_id"]] <- y_merge$V1
 
 
 #Extract only the mean()/std() variables from the feature set for column appending to the real data
@@ -97,6 +95,7 @@ names(data_summary) <- gsub("Gyro", ".gyro", names(data_summary))
 names(data_summary) <- gsub("Jerk", ".jerk", names(data_summary))
 names(data_summary) <- gsub("Mag", ".mag", names(data_summary))
 names(data_summary) <- gsub("\\-", "\\.", names(data_summary))
+names(data_summary) <- gsub("\\(\\)", "", names(data_summary))
 names(data_summary) <- tolower(names(data_summary))
 
 
@@ -108,7 +107,7 @@ data_summary_grouped <- data_summary %>%
     group_by(subject, activity_label) %>% 
     arrange(subject, activity_label) %>% 
     summarize_each(funs(mean))
-
+#Persist the results.
 write.csv(data_summary_grouped, "./data_summary_grouped.csv", row.names = FALSE)
 
 
