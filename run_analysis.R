@@ -65,16 +65,14 @@ data_summary <-  merge(
 
 #Read the X feature summary for test/train and merge together
 X_merge <- rbind(
-  read.table(paste(data_dir, "/test/X_test.txt", sep="")), 
-  read.table(paste(data_dir, "/train/X_train.txt", sep=""))
+  read.table(paste0(data_dir, "/test/X_test.txt")), 
+  read.table(paste0(data_dir, "/train/X_train.txt"))
 )
 
 #Apply the feature labels to the dataset as the colnames
 colnames(X_merge) <- feature_labels$feature_label
 #X_merge[["subject"]] <- subject_merge$V1
 #X_merge[["activity_id"]] <- y_merge$V1
-
-#Normalize the labels to make them more "tidy".
 
 
 #Extract only the mean()/std() variables from the feature set for column appending to the real data
@@ -83,18 +81,35 @@ data_summary <- cbind(
   X_merge[, grepl("(mean\\()|(std\\()", names(X_merge))]
 )
 
+#I no longer need the activity_id column, that data is in the activity_label factor column:
+data_summary <- select(data_summary, -activity_id)
+
 #Convert the subject integer column to a factor. 
 data_summary$subject <- as.factor(data_summary$subject)
 
-#I no longer need the activity_id column, that data is in the activity_label factor column:
-data_summary <- select(data_summary, -activity_id)
+#Normalize the labels to make them more "tidy".
+names(data_summary) <- gsub("^t", "time", names(data_summary))
+names(data_summary) <- gsub("^f", "frequency", names(data_summary))
+names(data_summary) <- gsub("Body", ".body", names(data_summary))
+names(data_summary) <- gsub("Gravity", ".gravity", names(data_summary))
+names(data_summary) <- gsub("Acc", ".acceleration", names(data_summary))
+names(data_summary) <- gsub("Gyro", ".gyro", names(data_summary))
+names(data_summary) <- gsub("Jerk", ".jerk", names(data_summary))
+names(data_summary) <- gsub("Mag", ".mag", names(data_summary))
+names(data_summary) <- gsub("\\-", "\\.", names(data_summary))
+names(data_summary) <- tolower(names(data_summary))
 
 
 
 #From the data set in step 4, creates a second, independent tidy data set 
 #  with the average of each variable for each activity and each subject.
 
-data_summary_grouped <- group_by(data_summary, subject, activity_label)
+data_summary_grouped <- data_summary %>% 
+    group_by(subject, activity_label) %>% 
+    arrange(subject, activity_label) %>% 
+    summarize_each(funs(mean))
+
+write.csv(data_summary_grouped, "./data_summary_grouped.csv", row.names = FALSE)
 
 
 
