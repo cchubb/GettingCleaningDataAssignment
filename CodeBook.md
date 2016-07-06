@@ -11,6 +11,7 @@ Notes
 
   * This data is sourced from the README.txt file inside the [compressed archive](https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip). Please review that file for any additional information that is required.
   * The collection methodology and details for the measures are further discussed in the features_info.txt file in the same archive file.
+  * The tidy data is presented in "Wide" format, one measurement per column. 
   * All measurements are of acceleration, measured are in gravities (g), referenced to 1.0 as Earth Standard. 
   * The following word in each measure name signify:
     * time - The measure is in the time domain.

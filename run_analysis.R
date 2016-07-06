@@ -8,10 +8,10 @@
 #Appropriately labels the data set with descriptive variable names.
 #From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 
-#Ensure I am working in the right project directory. Uncomment only on my own system. Evaluators will need to set this themselves.
-setwd("C:\\Users\\cchubb\\Coursera\\DataScience\\3Getting and Cleaning Data\\GettingCleaningDataAssignment")
+#Ensure I am working in the right project directory. Uncomment only on my own system. Evaluators may need to set this themselves.
+#setwd("C:\\Users\\cchubb\\Coursera\\DataScience\\3Getting and Cleaning Data\\GettingCleaningDataAssignment")
 #Clear out any local variables, start fresh and remove unneeded data from the global environment
-rm(list = ls())
+#rm(list = ls())
 
 library(dplyr)
 
