@@ -35,3 +35,4 @@ vignettes/*.pdf
 /*.csv
 /CodeBook.html
 /README.html
+/data_summary_grouped.txt

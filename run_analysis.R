@@ -108,7 +108,7 @@ data_summary_grouped <- data_summary %>%
     arrange(subject, activity_label) %>% 
     summarize_each(funs(mean))
 #Persist the results.
-write.csv(data_summary_grouped, "./data_summary_grouped.csv", row.names = FALSE)
+write.table(data_summary_grouped, "./data_summary_grouped.txt", row.names = FALSE)
 
 
 

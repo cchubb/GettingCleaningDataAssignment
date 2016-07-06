@@ -43,7 +43,7 @@ The included script, run_analysis.R, performs the following steps on the provide
   * Remove the activity_id column as redundant and convert the subject column to a factor.
   * Convert the column names (activity label) to a more tidy format. 
   * The data set is then grouped and sorted by subject and activity level factors and the mean() function is applied to all numeric columns. 
-  * The script persists the final data set to a CSV file "./data_summary_grouped.csv" with no row names to preserve maximum compatibility.
+  * The script persists the final data set to a TXT file "./data_summary_grouped.txt" with no row names to preserve maximum compatibility.
   
   
   
